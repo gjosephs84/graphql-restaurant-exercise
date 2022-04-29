@@ -2,7 +2,6 @@ var { graphqlHTTP } = require("express-graphql");
 var { buildSchema, assertInputType } = require("graphql");
 var express = require("express");
 
-// Construct a schema, using GraphQL schema language
 var restaurants = [
   {
     id: 1,
@@ -61,6 +60,9 @@ var restaurants = [
     ],
   },
 ];
+
+// Construct a schema, using GraphQL schema language
+
 var schema = buildSchema(`
 type Query{
   restaurant(id: Int): restaurant
@@ -95,12 +97,10 @@ var root = {
   restaurant: (arg) => restaurants[arg.id],
   restaurants: () => restaurants,
   setrestaurant: ({ input }) => {
-    // Your code goes here
-    restaurants.push({name:input.name, description:input.description});
+    restaurants.push({id:input.id, name:input.name, description:input.description});
     return input;
   },
   deleterestaurant: ({ id }) => {
-    // Your code goes here
     const ok = Boolean(restaurants[id]);
     let delc = restaurants[id];
     restaurants = restaurants.filter(item => item.id !== id);
@@ -115,7 +115,6 @@ var root = {
       ...restaurants[id],...restaurant
     };
     return restaurants[id];
-    // Your code goes here
   },
 };
 var app = express();
@@ -129,5 +128,3 @@ app.use(
 );
 var port = 5500;
 app.listen(5500, () => console.log("Running Graphql on Port:" + port));
-
-// export default root;
